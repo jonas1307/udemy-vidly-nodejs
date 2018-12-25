@@ -26,6 +26,14 @@ const schema = new mongoose.Schema({
 
 const User = mongoose.model('users', schema);
 
+function validateLogin(request) {
+    const schema = {
+        email: Joi.string().min(5).max(255).required().email(),
+        password: Joi.string().min(5).max(255).required()
+    };
+    return Joi.validate(request, schema);
+};
+
 function validateUser(user) {
     const options = {
         min: 6,
@@ -44,4 +52,5 @@ function validateUser(user) {
 };
 
 module.exports.User = User;
-module.exports.validate = validateUser;
+module.exports.validateUser = validateUser;
+module.exports.validateLogin = validateLogin;
