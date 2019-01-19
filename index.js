@@ -19,6 +19,11 @@ process.on('uncaughtException', (ex) => {
     winston.error(ex.message, ex);
 });
 
+process.on('unhandledRejection', (ex) => {
+    winston.error(ex.message, ex);
+    process.exit(1);
+});
+
 if (!config.get('jwtPrivateKey')){
     console.error("FATAL ERROR: jwtPrivateKey is not set.")
     process.exit(1);
