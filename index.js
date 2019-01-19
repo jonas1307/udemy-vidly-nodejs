@@ -15,6 +15,10 @@ const winston = require('winston');
 
 winston.add(winston.transports.File, {filename: 'exceptions.log'});
 
+process.on('uncaughtException', (ex) => {
+    winston.error(ex.message, ex);
+});
+
 if (!config.get('jwtPrivateKey')){
     console.error("FATAL ERROR: jwtPrivateKey is not set.")
     process.exit(1);
