@@ -3,17 +3,18 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../middlewares/auth');
 const admin = require('../middlewares/admin');
+const asyncMiddleware = require('../middlewares/asyncMiddleware');
 
-router.get('/', async (req, res) => {
+router.get('/', asyncMiddleware(async(req, res) => {
     const genres = await Genre.find().sort('name');
     res.send(genres);
-});
+}));
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', asyncMiddleware(async (req, res) => {
     const genre = await Genre.findById(req.params.id);
     if (!genre) return res.status(404).send('The genre with the given ID was not found.');
     res.send(genre);
-});
+}));
 
 router.post('/', auth, async (req, res) => {
     const { error } = validate(req.body);

@@ -10,6 +10,10 @@ const rentals = require('./routes/rentals');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 const config = require('config');
+const error = require('./middlewares/error');
+const winston = require('winston');
+
+winston.add(winston.transports.File, {filename: 'exceptions.log'});
 
 if (!config.get('jwtPrivateKey')){
     console.error("FATAL ERROR: jwtPrivateKey is not set.")
@@ -28,6 +32,7 @@ app.use('/api/movies', movies);
 app.use('/api/rentals', rentals);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+app.use(error);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
